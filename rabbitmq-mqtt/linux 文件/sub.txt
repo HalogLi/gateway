@@ -1,0 +1,50 @@
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+class SimpleMqttCallBack implements MqttCallback {
+
+
+public void connectionLost(Throwable throwable) {
+   System.out.println("Connection to MQTT broker lost!");
+  }
+ public void messageArrived(String s, MqttMessage mqttMessage) throws Exception,MqttException {
+    System.out.println("Message received:\t"+ new String(mqttMessage.getPayload()) );
+    
+        String message =new String(mqttMessage.getPayload());
+        System.out.println("Receive message");
+  }
+
+  public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+  }
+}
+public class Subscriber {  
+	Queue<String> queue = new LinkedList<String>();
+	
+	public static void main(String[] args) throws MqttException ,Exception{
+		 //Queue<String> queue = new LinkedList<String>();
+		MemoryPersistence persistence = new MemoryPersistence();
+	    System.out.println("== START SUBSCRIBER ==");
+	    String UserName="test3";
+	    String passWord ="yyy";
+	    String topic ="hello1";
+	    MqttClient client=new MqttClient("tcp://118.24.212.149:1883","lihailong");
+	    MqttConnectOptions connOpts = new MqttConnectOptions();
+	    connOpts.setCleanSession(true);
+	    connOpts.setAutomaticReconnect(true);
+	    connOpts.setUserName(UserName);
+	    connOpts.setPassword(passWord.toCharArray());
+	    connOpts.setConnectionTimeout(2);
+		connOpts.setKeepAliveInterval(60);
+	    client.setCallback( new SimpleMqttCallBack() );
+	    client.connect(connOpts);
+
+	    client.subscribe(topic);
+
+	  }
+}

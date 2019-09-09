@@ -1,0 +1,42 @@
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+public class Publisher {
+	public static void pub(String body)  throws MqttException {
+		String messageString = body;
+	    System.out.println("== START PUBLISHER ==");
+	    String UserName="test3";
+	    String passWord ="yyy";
+	    String topic ="hello2";
+
+	    MqttClient client = new MqttClient("tcp://118.24.212.149:1883", "lihailong1");
+	    System.out.println("下一步连接");
+	    MqttConnectOptions connOpts = new MqttConnectOptions();
+	    System.out.println("判断是否连接");
+	    connOpts.setCleanSession(true);
+	    connOpts.setUserName(UserName);
+	    connOpts.setPassword(passWord.toCharArray());
+	    client.connect(connOpts);
+	    MqttMessage message = new MqttMessage();
+	    
+	   message.setPayload(messageString.getBytes());
+	    client.publish(topic, message);
+
+	    System.out.println("\tMessage '"+ messageString +"' to 'hello2'");
+	    client.disconnect();
+	    System.out.println("== END PUBLISHER ==");
+
+	  }
+}
+{
+    "busiId": "fb83b6cf7d104f04b0a82bc1966b2168",
+    "custCode": "A0002",
+    "custName": "张三",
+    "phoneNumber": "13888888888",
+    "roomNo": "1-1-102",
+    "inOutType": "2",
+    "inOutTime": "20180719200000",
+    "passageId": "43432",
+    "passageType": "1"
+}
